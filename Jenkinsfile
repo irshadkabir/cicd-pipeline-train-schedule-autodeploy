@@ -33,8 +33,12 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh 'kubectl apply -f train-schedule-kube.yml'
-                sh 'kubectl set image deployment/train-schedule-deployment train-schedule=$DOCKER_IMAGE --record'
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh '''
+                        kubectl apply -f train-schedule-kube.yml
+                        kubectl set image deployment/train-schedule train-schedule=$DOCKER_IMAGE --record
+                    '''
+                }
             }
         }
     }
