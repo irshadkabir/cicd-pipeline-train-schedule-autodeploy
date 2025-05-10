@@ -48,7 +48,7 @@ pipeline {
                         kubectl apply -f train-schedule-kube.yml
 
                         # Set the new Docker image in Kubernetes
-                        kubectl set image deployment/train-schedule train-schedule=$DOCKER_IMAGE --record
+                        kubectl set image deployment/train-schedule-deployment train-schedule=$DOCKER_IMAGE --record
                     '''
                 }
             }
