@@ -33,7 +33,8 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                withCredentials([file(credentialsId: 'kubeconfig-prod1', variable: 'KUBECONFIG')]) {
+                withCredentials([usernamePassword(credentialsId: 'aws-creds', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY'),
+                     file(credentialsId: 'kubeconfig-prod1', variable: 'KUBECONFIG')]) {
                     sh '''
                         kubectl apply -f train-schedule-kube.yml
                         kubectl set image deployment/train-schedule train-schedule=$DOCKER_IMAGE --record
@@ -43,4 +44,3 @@ pipeline {
         }
     }
 }
-
